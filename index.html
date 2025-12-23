@@ -23,32 +23,6 @@
             z-index: 9999;
             display: none;
         }
-        .redirect-warning {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #800000;
-            color: white;
-            padding: 30px;
-            border-radius: 10px;
-            border: 3px solid #ff0000;
-            text-align: center;
-            z-index: 10000;
-            display: none;
-        }
-        .countdown {
-            font-size: 48px;
-            font-weight: bold;
-            color: #ff0000;
-            margin: 20px 0;
-            animation: pulse 1s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
         .site-info {
             position: fixed;
             top: 20px;
@@ -90,12 +64,28 @@
             width: 0%;
             transition: width 0.5s;
         }
+        .warning-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ff0000;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            z-index: 1002;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
+    <div class="warning-banner">
+        🚨 MALICIOUS ACTIVITY DETECTED - SECURITY COMPROMISED 🚨
+    </div>
+
     <div class="site-info" id="siteInfo">
         <div>🚨 MALICIOUS SITE #1 🚨</div>
-        <div>Redirecting in: <span id="countdown">5</span>s</div>
+        <div>Auto-redirecting...</div>
     </div>
 
     <div class="infection-meter">
@@ -104,13 +94,6 @@
 
     <div class="malicious-overlay" id="overlay"></div>
     
-    <div class="redirect-warning" id="redirectWarning">
-        <h2>⚠️ SECURITY BREACH DETECTED ⚠️</h2>
-        <div class="countdown" id="bigCountdown">5</div>
-        <p>Redirecting to malicious site...</p>
-        <p>DO NOT CLOSE THIS WINDOW!</p>
-    </div>
-
     <div class="malicious-popup" id="maliciousPopup">
         <h3>🦠 VIRUS ALERT 🦠</h3>
         <p>Your computer is infected!</p>
@@ -197,4 +180,61 @@
                 behaviors: ["gov_impersonation", "ssn_steal", "bank_access"]
             },
             {
-                url: "http:
+                url: "http://social-media-hack.net/followers",
+                title: "GET 10000 INSTAGRAM FOLLOWERS",
+                behaviors: ["account_hack", "password_steal", "spam_post"]
+            },
+            {
+                url: "http://fake-charity.org/donate",
+                title: "HELP CHILDREN - DONATE NOW",
+                behaviors: ["charity_scam", "payment_theft", "emotional_manipulation"]
+            },
+            {
+                url: "http://software-pirate.warez/download",
+                title: "FREE SOFTWARE DOWNLOADS",
+                behaviors: ["warez_distribution", "malware_bundle", "crack_tools"]
+            },
+            {
+                url: "http://streaming-piracy.tv/movies",
+                title: "WATCH LATEST MOVIES FREE",
+                behaviors: ["piracy_redirect", "malware_stream", "popup_storm"]
+            },
+            {
+                url: "http://fake-store.shop/deals",
+                title: "LIMITED TIME OFFER - 90% OFF",
+                behaviors: ["fake_store", "credit_card_theft", "shipping_scam"]
+            },
+            {
+                url: "http://investment-scam.pro/bitcoin",
+                title: "BITCOIN DOUBLING SCHEME",
+                behaviors: ["investment_fraud", "crypto_theft", "pyramid_scheme"]
+            },
+            {
+                url: "http://phishing-email.net/verify",
+                title: "EMAIL VERIFICATION REQUIRED",
+                behaviors: ["email_hijack", "password_reset", "spam_forward"]
+            },
+            {
+                url: "http://fake-security.camera/hack",
+                title: "SECURITY CAMERA HACK TOOL",
+                behaviors: ["camera_hack", "privacy_violation", "blackmail_material"]
+            },
+            {
+                url: "http://dark-web.marketplace/drugs",
+                title: "DARK WEB MARKETPLACE",
+                behaviors: ["illegal_market", "crypto_payment", "law_enforcement_trap"]
+            },
+            {
+                url: "http://fake-passport.gov/apply",
+                title: "EXPRESS PASSPORT SERVICE",
+                behaviors: ["document_fraud", "identity_theft", "government_impersonation"]
+            },
+            {
+                url: "http://virus-removal.tool/clean",
+                title: "VIRUS REMOVAL TOOL",
+                behaviors: ["fake_removal", "system_damage", "data_corruption"]
+            },
+            {
+                url: "http://hack-facebook.com/account",
+                title: "FACEBOOK ACCOUNT HACKER",
+                behaviors: ["social_media_hack", "phishing
